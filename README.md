@@ -41,8 +41,8 @@ The application provides a complete task management system with a unique, immers
 1. Clone the repository
 
 ```
-- git clone https://github.com/Augusto240/death_note_reminders.git 
-- cd death_note_reminders
+git clone https://github.com/Augusto240/death_note_reminders.git 
+cd death_note_reminders
 ```
 
 2. Install dependencies
