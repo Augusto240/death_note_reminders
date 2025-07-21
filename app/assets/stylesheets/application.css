@@ -1,0 +1,254 @@
+/* Tema Death Note */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond&display=swap');
+
+body {
+  background-color: #0a0a0a;
+  color: #eee;
+  font-family: 'EB Garamond', serif;
+  margin: 0;
+  padding: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23171717' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.header:after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 30%;
+  right: 30%;
+  height: 1px;
+  background-color: crimson;
+}
+
+.header h1 {
+  font-size: 3rem;
+  color: #fff;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+  margin: 0;
+}
+
+.subtitle {
+  color: #aaa;
+  font-style: italic;
+  margin-top: 5px;
+  font-size: 1.1rem;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.nav a {
+  color: #eee;
+  text-decoration: none;
+  margin: 0 15px;
+  padding: 8px 12px;
+  border: 1px solid #333;
+  transition: all 0.3s;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+}
+
+.nav a:hover {
+  background-color: rgba(220, 20, 60, 0.2);
+  border-color: crimson;
+  color: crimson;
+}
+
+a {
+  color: crimson;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+a:hover {
+  color: #ff6b81;
+  text-decoration: none;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #222;
+  color: #eee;
+  border: 1px solid #444;
+  cursor: pointer;
+  text-decoration: none;
+  margin: 5px 0;
+  transition: all 0.3s;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+}
+
+.btn-danger {
+  background-color: rgba(139, 0, 0, 0.7);
+  border-color: #700;
+}
+
+.btn:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-danger:hover {
+  background-color: crimson;
+}
+
+.reminder {
+  border: 1px solid #333;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: all 0.3s;
+  background-color: rgba(10, 10, 10, 0.7);
+  border-radius: 3px;
+  position: relative;
+}
+
+.reminder:hover {
+  background-color: #191919;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.reminder-overdue {
+  border-left: 4px solid crimson;
+}
+
+.reminder h3 {
+  margin-top: 0;
+  color: #fff;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+}
+
+.reminder-overdue h3 {
+  color: crimson;
+}
+
+.form-field {
+  margin-bottom: 20px;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ccc;
+  font-family: 'Cinzel', serif;
+}
+
+.form-field input[type="text"],
+.form-field input[type="date"],
+.form-field textarea {
+  width: 100%;
+  padding: 10px;
+  background-color: #222;
+  border: 1px solid #444;
+  color: #eee;
+  font-family: 'EB Garamond', serif;
+  font-size: 1rem;
+  border-radius: 3px;
+}
+
+.form-field input[type="text"]:focus,
+.form-field input[type="date"]:focus,
+.form-field textarea:focus {
+  border-color: crimson;
+  outline: none;
+  box-shadow: 0 0 5px rgba(220, 20, 60, 0.5);
+}
+
+.completed {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.notice {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-left: 4px solid crimson;
+  animation: fadeOut 5s forwards;
+  animation-delay: 3s;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+.death-counter {
+  text-align: center;
+  margin: 20px 0;
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: crimson;
+}
+
+.death-quote {
+  font-style: italic;
+  text-align: center;
+  color: #888;
+  margin: 30px 0;
+  padding: 15px;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+}
+
+.search-form {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.search-form input[type="text"] {
+  padding: 8px 12px;
+  background-color: #222;
+  border: 1px solid #444;
+  color: #eee;
+  width: 50%;
+  border-radius: 3px 0 0 3px;
+}
+
+.search-form .btn {
+  border-radius: 0 3px 3px 0;
+  margin: 0;
+}
+
+.section-title {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 2px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  margin-top: 30px;
+}
+
+.execute-animation {
+  animation: fadeAway 1.5s forwards;
+}
+
+@keyframes fadeAway {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9) rotate(2deg); }
+  100% { opacity: 0; transform: scale(0) rotate(5deg); }
+}

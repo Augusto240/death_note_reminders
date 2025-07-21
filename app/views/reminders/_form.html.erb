@@ -1,0 +1,40 @@
+<div class="death-note-form">
+  <%= form_with(model: reminder) do |form| %>
+    <% if reminder.errors.any? %>
+      <div style="color: crimson; margin-bottom: 20px;">
+        <h2><%= pluralize(reminder.errors.count, "error") %> prohibited this name from being written in the Death Note:</h2>
+
+        <ul>
+          <% reminder.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-field">
+      <%= form.label :name, "Name of victim" %>
+      <%= form.text_field :name, placeholder: "Enter the name exactly as it appears..." %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :description, "Execution details" %>
+      <%= form.text_area :description, rows: 4, placeholder: "Describe the circumstances of death..." %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :due_date, "Execution date" %>
+      <%= form.date_field :due_date %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :status, "Executed?" %>
+      <%= form.check_box :status %>
+      <span class="status-help">(Check if already executed)</span>
+    </div>
+
+    <div>
+      <%= form.submit "Write in Death Note", class: "btn" %>
+    </div>
+  <% end %>
+</div>

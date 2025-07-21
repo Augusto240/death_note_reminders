@@ -1,0 +1,39 @@
+<div class="reminder <%= 'reminder-overdue' if @reminder.due_date < Date.today && !@reminder.status %> <%= 'completed' if @reminder.status %>">
+  <h2><%= @reminder.name %></h2>
+
+  <p>
+    <strong>Execution details:</strong>
+    <%= @reminder.description %>
+  </p>
+
+  <p>
+    <strong>Execution date:</strong>
+    <% if @reminder.due_date < Date.today && !@reminder.status %>
+      <span style="color: crimson;"><%= @reminder.due_date.strftime("%B %d, %Y") %> (OVERDUE)</span>
+    <% else %>
+      <%= @reminder.due_date.strftime("%B %d, %Y") %>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    <% if @reminder.status %>
+      <span style="color: #888;">Executed</span>
+    <% else %>
+      <span>Pending</span>
+    <% end %>
+  </p>
+
+  <div class="actions">
+    <%= link_to "Edit", edit_reminder_path(@reminder), class: "btn" %>
+    <%= link_to "Back", reminders_path, class: "btn" %>
+    
+    <% unless @reminder.status %>
+      <%= button_to "Execute", reminder_path(@reminder, reminder: { status: true }), method: :patch, class: "btn btn-danger" %>
+    <% else %>
+      <%= button_to "Revive", reminder_path(@reminder, reminder: { status: false }), method: :patch, class: "btn" %>
+    <% end %>
+    
+    <%= button_to "Delete", @reminder, method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "Are you sure you want to remove this name from the Death Note?" } } %>
+  </div>
+</div>
