@@ -6,7 +6,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application", "death_note", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     
     <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB1UlEQVRYR+2WTUsCURSG32tppLXoD0QQtK1VQdCiVUFEQUS7foD5EwLbtHNR21YR7VpZ0MYvnDdm4Doz3rmjoDA4q7nnnvOc95z3fAzxz8b+mR8JIAqBJELJwH8wYGbLAFYBnEm6jEo8FoCZbQDoBZAHkJX0EBVEZABmdgJgStIbgA1J+2GmZjYPYBdA9iPnLmk5LBcmQnMAZwBWAJwCWJPEfn8zszkAewCEOwC3kjZDc6OejwSQb1sE0AXgDcC6pINKADN7ltRrZikA5wCWJN3XA+EHBGB9AK4BrEo6KgcIYs7rHLEtaasWY7+svADoSLqsClAs+1HSQrUGTCenPE5TOizpxHMCaNTMCgD6Ja1XMlXOjJktAjgAsC3poFYzvifMrB3AnqQJz8zM2HwOwJikj8BsYKbE3zQJQMM3SZka6R31uCUAJwD4/YbmIgOUhFtaAabTTzPj/n5JuiPCTQEwM3rKSaBD0qNX22YBMDi3LLdt75LozN8+KnVcF4CZDQLgPk95TSX1+GVpBIBnws1s2n0cAeBCQ2OD/Ek5JIkbU2gbARCe3QUwIek9FACNuFKdO9WlJF4wdVuYuRHHBbL+FACXOJTUCIBIkdcbSIRiBrIxIy/ybDqaJQAAAABJRU5ErkJggg==" />
@@ -18,17 +18,37 @@
         <h1>Death Note</h1>
         <div class="subtitle">The human whose name is written in this note shall die...</div>
         <div class="nav">
-          <%= link_to "All Names", reminders_path %>
-          <%= link_to "Add New Name", new_reminder_path %>
-          <%= link_to "Overdue", reminders_path(filter: "overdue") %>
-          <%= link_to "Completed", reminders_path(filter: "completed") %>
-          <%= link_to "About", about_path %>
+          <%= link_to "All Names", reminders_path, class: current_page?(reminders_path) && !params[:filter] ? "active" : "" %>
+          <%= link_to "Add New Name", new_reminder_path, class: current_page?(new_reminder_path) ? "active" : "" %>
+          <%= link_to "Overdue", reminders_path(filter: "overdue"), class: params[:filter] == "overdue" ? "active" : "" %>
+          <%= link_to "Upcoming", reminders_path(filter: "upcoming"), class: params[:filter] == "upcoming" ? "active" : "" %>
+          <%= link_to "Completed", reminders_path(filter: "completed"), class: params[:filter] == "completed" ? "active" : "" %>
+          <%= link_to "Statistics", statistics_reminders_path, class: current_page?(statistics_reminders_path) ? "active" : "" %>
+          <%= link_to "Rules", rules_path, class: current_page?(rules_path) ? "active" : "" %>
+          <%= link_to "About", about_path, class: current_page?(about_path) ? "active" : "" %>
         </div>
       </div>
       
       <% if notice %>
         <div class="notice"><%= notice %></div>
       <% end %>
+      
+      <% if alert %>
+        <div class="alert"><%= alert %></div>
+      <% end %>
+      
+      <div class="search-form">
+        <%= form_with url: reminders_path, method: :get, local: true do |form| %>
+          <%= form.search_field :query, placeholder: "Search for a name...", value: params[:query] %>
+          <%= form.button "Search", name: nil %>
+        <% end %>
+      </div>
+      
+      <div class="death-counter">
+        <%= Reminder.where(status: true).count %> executions completed
+      </div>
+      
+      <%= yield %>
       
       <% death_note_quotes = [
         "This world is rotten, and those who are making it rot deserve to die.",
@@ -37,41 +57,31 @@
         "I am Justice!",
         "In this world, there are very few people who actually trust each other.",
         "Humans aren't made perfectly. Everyone lies. Even so... I've been careful not to tell lies that hurt others.",
-        "The real evil is the power to kill people. Someone who finds himself with that power is cursed. No matter how you use it, anything obtained by killing people can never bring true happiness.",
-        "If you can't win the game, if you can't solve the puzzle, you're nothing but a loser."
+        "The real evil is the power to kill people. Someone who finds himself with that power is cursed.",
+        "If you can't win the game, if you can't solve the puzzle, you're nothing but a loser.",
+        "I'll become the god of a new world that everyone desires!"
       ] %>
-      
-      <div class="death-counter">
-        <%= Reminder.where(status: true).count %> executions completed
-      </div>
-      
-      <div class="search-form">
-        <%= form_with url: search_reminders_path, method: :get, local: true do |form| %>
-          <%= form.text_field :query, placeholder: "Search for a name..." %>
-          <%= form.submit "Search", class: "btn" %>
-        <% end %>
-      </div>
-      
-      <%= yield %>
       
       <div class="death-quote">
         "<%= death_note_quotes.sample %>"
       </div>
+      
+      <footer class="footer">
+        <p>Death Note Reminders &copy; <%= Date.today.year %> | A Rails Application</p>
+      </footer>
     </div>
     
     <script>
       document.addEventListener('turbo:load', function() {
-        // Função para tocar o som ao marcar como executado
-        const executeButtons = document.querySelectorAll('.btn-danger');
+        // Function to play sound when executing a name
+        const executeButtons = document.querySelectorAll('.btn-execute');
         executeButtons.forEach(button => {
-          if (button.textContent.trim() === 'Execute') {
-            button.addEventListener('click', function(e) {
-              const reminder = this.closest('.reminder');
-              if (reminder) {
-                reminder.classList.add('execute-animation');
-              }
-            });
-          }
+          button.addEventListener('click', function(e) {
+            const reminder = this.closest('.reminder');
+            if (reminder) {
+              reminder.classList.add('execute-animation');
+            }
+          });
         });
       });
     </script>

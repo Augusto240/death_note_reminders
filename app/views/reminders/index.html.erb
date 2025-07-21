@@ -1,39 +1,74 @@
 <h2 class="section-title">Death Note Entries</h2>
 
+<% if Reminder.column_names.include?('cause_of_death') %>
+  <div class="filter-section">
+    <%= form_with url: reminders_path, method: :get, local: true do |form| %>
+      <% if params[:query].present? %>
+        <%= form.hidden_field :query, value: params[:query] %>
+      <% end %>
+      
+      <%= form.select :cause_of_death, 
+                     options_for_select([["All Causes", ""]] + Reminder::CAUSES_OF_DEATH, params[:cause_of_death]), 
+                     {}, 
+                     { onchange: 'this.form.submit()' } %>
+    <% end %>
+  </div>
+<% end %>
+
 <div id="reminders">
   <% if @reminders.empty? %>
-    <p>No names written in the Death Note yet.</p>
+    <div class="empty-state">
+      <p>No names have been written in the Death Note yet.</p>
+      <%= link_to "Write your first name", new_reminder_path, class: "btn" %>
+    </div>
   <% else %>
     <% @reminders.each do |reminder| %>
-      <div class="reminder <%= 'reminder-overdue' if reminder.due_date < Date.today && !reminder.status %> <%= 'completed' if reminder.status %>">
+      <div id="<%= dom_id(reminder) %>" class="reminder <%= 'reminder-overdue' if reminder.due_date < Date.today && !reminder.status %> <%= 'completed' if reminder.status %>">
         <h3><%= reminder.name %></h3>
-        <p><strong>Execution details:</strong> <%= reminder.description %></p>
-        <p>
-          <strong>Execution date:</strong> 
-          <% if reminder.due_date < Date.today && !reminder.status %>
-            <span style="color: crimson;"><%= reminder.due_date.strftime("%B %d, %Y") %> (OVERDUE)</span>
-          <% else %>
-            <%= reminder.due_date.strftime("%B %d, %Y") %>
-          <% end %>
-        </p>
-        <p>
-          <strong>Status:</strong> 
-          <% if reminder.status %>
-            <span style="color: #888;">Executed</span>
-          <% else %>
-            <span>Pending</span>
-          <% end %>
-        </p>
         
-        <div class="actions">
+        <div class="reminder-details">
+          <p><strong>Execution details:</strong> <%= reminder.description %></p>
+          <% if reminder.respond_to?(:cause_of_death) && reminder.cause_of_death.present? %>
+            <p>
+              <strong>Cause of death:</strong> <%= reminder.cause_of_death %>
+            </p>
+          <% end %>
+          <p>
+            <strong>Execution date:</strong> 
+            <% if reminder.due_date < Date.today && !reminder.status %>
+              <span style="color: var(--death-note-red-light);"><%= reminder.due_date.strftime("%B %d, %Y") %> (OVERDUE)</span>
+            <% else %>
+              <%= reminder.due_date.strftime("%B %d, %Y") %>
+            <% end %>
+          </p>
+          <p>
+            <strong>Status:</strong> 
+            <% if reminder.status %>
+              <span style="color: var(--death-note-muted);">Executed</span>
+            <% else %>
+              <span>Pending</span>
+            <% end %>
+          </p>
+        </div>
+        
+        <div class="btn-group">
           <%= link_to "View", reminder, class: "btn" %>
           <%= link_to "Edit", edit_reminder_path(reminder), class: "btn" %>
           <% unless reminder.status %>
-            <%= button_to "Execute", reminder_path(reminder, reminder: { status: true }), method: :patch, class: "btn btn-danger", data: { turbo_frame: "_top" } %>
+            <%= button_to "Execute", reminder_path(reminder, reminder: { status: true }), 
+                          method: :patch, 
+                          class: "btn btn-execute", 
+                          form: { data: { turbo_frame: "_top" } } %>
           <% else %>
-            <%= button_to "Revive", reminder_path(reminder, reminder: { status: false }), method: :patch, class: "btn", data: { turbo_frame: "_top" } %>
+            <%= button_to "Revive", reminder_path(reminder, reminder: { status: false }), 
+                          method: :patch, 
+                          class: "btn", 
+                          form: { data: { turbo_frame: "_top" } } %>
           <% end %>
-          <%= button_to "Delete", reminder, method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "Are you sure you want to remove this name from the Death Note?" } } %>
+          <%= button_to "Delete", reminder, 
+                        method: :delete, 
+                        class: "btn btn-danger", 
+                        form: { data: { turbo_confirm: "Are you sure you want to erase this name from the Death Note?", turbo_frame: "_top" } } %>
         </div>
       </div>
     <% end %>

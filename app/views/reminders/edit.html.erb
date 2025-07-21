@@ -1,10 +1,8 @@
-<h2>Editing Entry in Death Note</h2>
+<h2 class="section-title">Editing Entry in Death Note</h2>
 
 <%= render "form", reminder: @reminder %>
 
-<br>
-
-<div>
+<div class="form-actions">
   <%= link_to "View", @reminder, class: "btn" %>
   <%= link_to "Back to Death Note", reminders_path, class: "btn" %>
 </div>

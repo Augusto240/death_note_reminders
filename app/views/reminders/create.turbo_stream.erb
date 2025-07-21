@@ -1,0 +1,2 @@
+<%= turbo_stream.prepend "reminders", partial: "reminders/reminder", locals: { reminder: @reminder } %>
+<%= turbo_stream.update "new_reminder", "" %>

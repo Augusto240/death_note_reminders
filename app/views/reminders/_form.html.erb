@@ -1,7 +1,7 @@
 <div class="death-note-form">
-  <%= form_with(model: reminder) do |form| %>
+  <%= form_with(model: reminder, class: "reminder-form") do |form| %>
     <% if reminder.errors.any? %>
-      <div style="color: crimson; margin-bottom: 20px;">
+      <div class="error-messages">
         <h2><%= pluralize(reminder.errors.count, "error") %> prohibited this name from being written in the Death Note:</h2>
 
         <ul>
@@ -21,20 +21,26 @@
       <%= form.label :description, "Execution details" %>
       <%= form.text_area :description, rows: 4, placeholder: "Describe the circumstances of death..." %>
     </div>
+    
+    <% if Reminder.column_names.include?('cause_of_death') %>
+      <div class="form-field">
+        <%= form.label :cause_of_death, "Cause of death" %>
+        <%= form.select :cause_of_death, Reminder::CAUSES_OF_DEATH %>
+      </div>
+    <% end %>
 
     <div class="form-field">
       <%= form.label :due_date, "Execution date" %>
       <%= form.date_field :due_date %>
     </div>
 
-    <div class="form-field">
-      <%= form.label :status, "Executed?" %>
+    <div class="form-field checkbox-field">
       <%= form.check_box :status %>
-      <span class="status-help">(Check if already executed)</span>
+      <%= form.label :status, "Already executed" %>
     </div>
 
-    <div>
-      <%= form.submit "Write in Death Note", class: "btn" %>
+    <div class="form-actions">
+      <%= form.submit reminder.new_record? ? "Write in Death Note" : "Update Death Note Entry", class: "btn" %>
     </div>
   <% end %>
 </div>

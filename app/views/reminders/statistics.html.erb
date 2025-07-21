@@ -1,0 +1,79 @@
+<h2 class="section-title">Death Note Statistics</h2>
+
+<div class="stats-container">
+  <div class="stat-card">
+    <h3>Total Names</h3>
+    <div class="stat-number"><%= @total_count %></div>
+  </div>
+  
+  <div class="stat-card">
+    <h3>Executed</h3>
+    <div class="stat-number"><%= @executed_count %></div>
+  </div>
+  
+  <div class="stat-card">
+    <h3>Pending</h3>
+    <div class="stat-number"><%= @pending_count %></div>
+  </div>
+  
+  <div class="stat-card">
+    <h3>Overdue</h3>
+    <div class="stat-number"><%= @overdue_count %></div>
+  </div>
+  
+  <div class="stat-card">
+    <h3>Upcoming</h3>
+    <div class="stat-number"><%= @upcoming_count %></div>
+  </div>
+</div>
+
+<h3 class="section-title">Execution Rate</h3>
+<div class="progress-container">
+  <div class="progress-bar" style="width: <%= @execution_rate %>%"></div>
+</div>
+<p class="execution-rate-text"><%= @execution_rate %>% of all names have been executed</p>
+
+<% if @recent_executions.any? %>
+  <h3 class="section-title">Recent Executions</h3>
+  <div id="recent-executions">
+    <% @recent_executions.each do |reminder| %>
+      <div class="reminder completed">
+        <h3><%= reminder.name %></h3>
+        <div class="reminder-details">
+          <% if reminder.respond_to?(:cause_of_death) && reminder.cause_of_death.present? %>
+            <p><strong>Cause of death:</strong> <%= reminder.cause_of_death %></p>
+          <% end %>
+          <p><strong>Executed on:</strong> <%= reminder.updated_at.strftime("%B %d, %Y") %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @death_causes.any? %>
+  <h3 class="section-title">Causes of Death</h3>
+  <div class="death-causes-chart">
+    <table class="death-causes-table">
+      <thead>
+        <tr>
+          <th>Cause</th>
+          <th>Count</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @death_causes.each do |cause, count| %>
+          <tr>
+            <td><%= cause %></td>
+            <td><%= count %></td>
+            <td><%= (count.to_f / @executed_count * 100).round(1) %>%</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<div class="btn-group">
+  <%= link_to "Back to Death Note", reminders_path, class: "btn" %>
+</div>

@@ -1,20 +1,12 @@
 <h2 class="section-title">Write a New Name in the Death Note</h2>
 
-<div class="death-note-rules">
-  <p><strong>Remember the rules:</strong></p>
-  <ol>
-    <li>The human whose name is written in this note shall die.</li>
-    <li>You must have the person's face in mind when writing the name.</li>
-    <li>If you specify the cause of death within 40 seconds, it will happen as written.</li>
-    <li>If no cause is specified, they will die of a heart attack.</li>
-    <li>After writing the cause, you have 6 minutes and 40 seconds to add details.</li>
-  </ol>
+<div class="death-note-rules-summary">
+  <p><strong>Remember the rules:</strong> The human whose name is written in this note shall die. You must have the person's face in mind when writing the name.</p>
+  <p><%= link_to "View all Death Note rules", rules_path %></p>
 </div>
 
 <%= render "form", reminder: @reminder %>
 
-<br>
-
-<div>
+<div class="form-actions">
   <%= link_to "Back to Death Note", reminders_path, class: "btn" %>
 </div>
